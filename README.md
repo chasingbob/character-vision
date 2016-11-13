@@ -9,8 +9,8 @@ The quality of a deep learning model depends largely on the quality of the data 
 
 ## The model
 ### Model architecture
+Einstein:
 > Everything should be made as simple as possible, but not simpler.  
-> Einstein
 
 Adopting Einstein's quote and changing it slightly for deep learning:
 
