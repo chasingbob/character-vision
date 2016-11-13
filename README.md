@@ -8,8 +8,8 @@ To use Deep Learning to identify and recognize characters in any random scenario
 The quality of a deep learning model depends to a large extend on the quality of the data set used for training. Quality data sets are hard to come by, and has rightly been called the new *GOLD*. Being able to augment existing data and to generate new data if it hasn't already will become an important tool. The main objective of this project is to solve a complicated real world problem only solely using generated data. 
 
 
-## The model
-### Model architecture
+## Model
+### Architecture
 Einstein:
 > Everything should be made as simple as possible, but not simpler.  
 
@@ -22,7 +22,7 @@ Adopting Einstein's quote and changing it slightly for deep learning:
 
 
 
-## The training
+## Training
 ### Over-fitting
 
 
