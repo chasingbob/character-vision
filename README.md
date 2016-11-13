@@ -5,7 +5,8 @@ Using deep learning to recognize characters and digits in random scenarios simil
 To use Deep Learning to identify and recognize characters in any random scenario by only using generated data.
 
 ## Data
-The quality of a deep learning model depends largely on the quality of the data set. And quality data sets are hard to come by, and has rightly been called the GOLD of modern times. With that in mind I have set my self the challenge of training a deep learning model that performs well in real world scenarios but trained solely on generated data. 
+The quality of a deep learning model depends to a large extend on the quality of the data set used for training. Quality data sets are hard to come by, and has rightly been called the new *GOLD*. Being able to augment existing data and to generate new data if it hasn't already will become an important tool. The main objective of this project is to solve a complicated real world problem only solely using generated data. 
+
 
 ## The model
 ### Model architecture
