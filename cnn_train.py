@@ -4,7 +4,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 
-img_width, img_height = 200, 200
+img_width, img_height = 64, 64
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'

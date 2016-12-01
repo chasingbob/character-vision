@@ -1,4 +1,5 @@
 import os
+from os.path import join, isfile, isdir
 import errno
 import PIL
 from PIL import ImageFont
@@ -9,13 +10,35 @@ import random
 random.seed(5)
 
 def get_random_font():
-	return ImageFont.truetype("/usr/share/fonts/dejavu/DejaVuSans.ttf",random.randint(10,45))
+    allowed_fonts = [
+        'dejavu',
+        'freefont',
+    ]
+    not_found = True
+    for i in range(5):
+        base_dir = '/usr/share/fonts/truetype'
+        font_dirs = [d for d in os.listdir(base_dir) if isdir(join(base_dir, d)) and d in allowed_fonts]
+        font_dir = font_dirs[random.randint(0,len(font_dirs)-1)]
+        fonts = [f for f in os.listdir(join(base_dir, font_dir)) if f.endswith('.ttf')]
+        if len(fonts) > 0:
+            font_name = fonts[random.randint(0, len(fonts)-1)]
+            print(font_name)
+            font_path = join(join(base_dir, font_dir), font_name)
+            font = ImageFont.truetype(font_path, random.randint(12,55))
+            not_fount = False
+            return font
+
+
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",random.randint(10,45))
+
+    return font
+
 
 def get_random_color():
 	return(random.randint(1, 255), random.randint(1, 255), random.randint(1, 255))
 
 def get_random_pos():
-	return (random.randint(1, 180),random.randint(1, 180))
+	return (random.randint(1, 150),random.randint(1, 150))
 
 def generate_random_img(filename, text):
 	font = get_random_font()
