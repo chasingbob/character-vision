@@ -14,7 +14,6 @@ def get_random_font():
         'dejavu',
         'freefont',
     ]
-    not_found = True
     for i in range(5):
         base_dir = '/usr/share/fonts/truetype'
         font_dirs = [d for d in os.listdir(base_dir) if isdir(join(base_dir, d)) and d in allowed_fonts]
@@ -25,7 +24,6 @@ def get_random_font():
             print(font_name)
             font_path = join(join(base_dir, font_dir), font_name)
             font = ImageFont.truetype(font_path, random.randint(12,55))
-            not_fount = False
             return font
 
 
@@ -70,11 +68,11 @@ def make_sure_path_exists(path):
 
 def main():
 	
-	generate_batch('data/train','a',1000)
-	generate_batch('data/train','b',1000)
+	generate_batch('data/train','0',1000)
+	generate_batch('data/train','1',1000)
 
-	generate_batch('data/validation','a',400)
-	generate_batch('data/validation','b',400)
+	generate_batch('data/validation','0',400)
+	generate_batch('data/validation','1',400)
 
 
 if __name__ == '__main__':
