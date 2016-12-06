@@ -3,14 +3,16 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
+import numpy as np
+import matplotlib.pyplot as plt
 
 img_width, img_height = 64, 64
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
-nb_train_samples = 2000
-nb_validation_samples = 800
-nb_epoch = 300
+nb_train_samples = 4000
+nb_validation_samples = 1600
+nb_epoch = 50
 
 model = Sequential()
 model.add(Convolution2D(32, 3, 3, input_shape=(img_width, img_height, 3)))
@@ -25,6 +27,10 @@ model.add(Convolution2D(64, 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
+model.add(Convolution2D(128, 3, 3))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 model.add(Flatten())
 model.add(Dense(64))
 model.add(Activation('relu'))
@@ -36,12 +42,12 @@ model.compile(loss='binary_crossentropy',
 				optimizer='rmsprop',
 				metrics=['accuracy'])
 
-#train_datagen = ImageDataGenerator(
-#		rescale=1./255,
-#		shear_range=0.2,
-#		zoom_range=0.2,
-#		horizontal_flip=False)
-train_datagen = ImageDataGenerator(rescale=1./255)
+train_datagen = ImageDataGenerator(
+		rescale=1./255,
+	        shear_range=0.1,
+		zoom_range=0.1,
+		horizontal_flip=False)
+#train_datagen = ImageDataGenerator(rescale=1./255)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -60,12 +66,29 @@ validation_generator = test_datagen.flow_from_directory(
 
 start = time.time()
 
-model.fit_generator(
-		train_generator,
-		samples_per_epoch=nb_train_samples,
-		nb_epoch=nb_epoch,
-		validation_data=validation_generator,
-		nb_val_samples=nb_validation_samples)
+not_found = True
+val_acc = []
+acc = []
+
+hist = model.fit_generator(
+	train_generator,
+	samples_per_epoch=nb_train_samples,
+	nb_epoch=nb_epoch,
+	validation_data=validation_generator,
+	nb_val_samples=nb_validation_samples)
+
+
+print(hist.history.keys())
+
+plt.plot(hist.history['acc'])
+#plt.plot(acc)
+#plt.plot(val_acc)
+plt.plot(hist.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 model.save_weights('weights.hdf5')
 
