@@ -3,8 +3,10 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
+from keras.callbacks import History, ModelCheckpoint, Callback
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 img_width, img_height = 64, 64
 
@@ -70,27 +72,79 @@ not_found = True
 val_acc = []
 acc = []
 
+class Plotter(Callback):
+    def on_train_begin(self, logs={}):
+        self.acc = []
+        self.val_acc = []
+        self.loss = []
+        self.val_loss = []
+        self.epoch_count = 0
+        plt.ion()
+        plt.show()
+
+
+    def on_epoch_end(self, epoch, logs={}):
+        self.epoch_count += 1
+        self.val_acc.append(logs.get('val_acc'))
+        self.acc.append(logs.get('acc'))
+        self.loss.append(logs.get('loss'))
+        self.val_loss.append(logs.get('val_loss'))
+        epochs = [x for x in range(self.epoch_count)]
+
+        fig = plt.figure(1)
+        plt.subplot(211)
+        plt.title('Train vs Validation Accuracy')
+        plt.axis([0,50,0,1])
+        plt1 = plt.plot(epochs, self.val_acc, color='r')
+        plt2 = plt.plot(epochs, self.acc, color='b')
+        plt.ylabel('accuracy')
+
+        red_patch = mpatches.Patch(color='red', label='Test')
+        blue_patch = mpatches.Patch(color='blue', label='Train')
+
+        plt.legend(handles=[red_patch, blue_patch], loc=4)
+        plt.subplot(212)
+        plt.title('Train vs Validation Loss')
+        plt.axis([0,50,0,1])
+        plt3 = plt.plot(epochs, self.val_loss, color='r')
+        plt4 = plt.plot(epochs, self.loss, color='b')
+        plt.ylabel('loss')
+
+        red_patch = mpatches.Patch(color='red', label='Test')
+        blue_patch = mpatches.Patch(color='blue', label='Train')
+
+        plt.legend(handles=[red_patch, blue_patch], loc=1)
+        plt.draw()
+        plt.pause(0.001)
+        
+        #plt.savefig(locpath+'training_error.png')
+        #plt.close('all')
+
+plotter = Plotter()
+
 hist = model.fit_generator(
 	train_generator,
 	samples_per_epoch=nb_train_samples,
 	nb_epoch=nb_epoch,
 	validation_data=validation_generator,
-	nb_val_samples=nb_validation_samples)
+	nb_val_samples=nb_validation_samples,
+        callbacks=[plotter])
 
 
-print(hist.history.keys())
 
-plt.plot(hist.history['acc'])
+
+#plt.plot(hist.history['acc'])
 #plt.plot(acc)
 #plt.plot(val_acc)
-plt.plot(hist.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+#plt.plot(hist.history['val_acc'])
+#plt.title('model accuracy')
+#plt.ylabel('accuracy')
+#plt.xlabel('epoch')
+#plt.legend(['train', 'test'], loc='upper left')
+#plt.show()
 
 model.save_weights('weights.hdf5')
 
 end = time.time()
 print('Duration: {}'.format(end - start))
+input('Press ENTER to continue...')
